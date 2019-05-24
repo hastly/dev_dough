@@ -1,0 +1,25 @@
+#!/usr/bin/env ansible-playbook
+
+---
+
+- hosts: localhost
+  become: true
+  tasks:
+    - name: Create network
+      docker_network:
+        name: crocodile
+    - name: Run db container
+      docker_container:
+        name: database
+        state: started
+        image: postgres:9.5.9-alpine
+        published_ports:
+          - 15432:5432
+        volumes:
+         - '.:/data/postgres:rw'
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: qweasdzxc
+          PGDATA: /data/postgres
+        networks:
+          - name: crocodile

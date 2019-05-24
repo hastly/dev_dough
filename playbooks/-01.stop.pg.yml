@@ -1,0 +1,13 @@
+#!/usr/bin/env ansible-playbook
+
+---
+
+- hosts: localhost
+  # become: true
+  gather_facts: false
+  tasks:
+    - name: Stop db container
+      docker_container:
+        name: database
+        state: absent
+

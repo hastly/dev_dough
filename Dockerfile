@@ -15,6 +15,8 @@ ENV ANSIBLE_RETRY_FILES_ENABLED false
 ENV ANSIBLE_SSH_PIPELINING true
 ENV DOCKER_HOST="tcp://127.0.0.1:2376"
 
-WORKDIR /ansible/playbooks
+WORKDIR /ansible
 
-ENTRYPOINT ["ansible-playbook", "start.yml"]
+CMD tail -f /dev/null
+ENTRYPOINT sh -c
+
