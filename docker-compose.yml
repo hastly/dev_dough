@@ -1,0 +1,29 @@
+version: "3.7"
+
+# docker run \
+#   -d --restart=always -p 127.0.0.1:2376:2375 \
+#   -v /var/run/docker.sock:/var/run/docker.sock \
+#   alpine/socat tcp-listen:2375,fork,reuseaddr unix-connect:/var/run/docker.sock
+
+networks:
+  hostnet:
+    external: true
+    name: host
+
+services:
+  docker_socket_proxy:
+    image: alpine/socat
+    restart: always
+    ports:
+      - "127.0.0.1:2376:2375"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    command: ["tcp-listen:2375,fork,reuseaddr", "unix-connect:/var/run/docker.sock"]
+  ansible_control:
+    network_mode: host
+    build:
+      context: .
+    # tty: true
+    # command: ["/bin/bash"]
+    volumes:
+      - ./playbooks:/ansible/playbooks
